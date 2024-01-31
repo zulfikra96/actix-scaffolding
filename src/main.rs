@@ -4,13 +4,13 @@ mod config;
 
 use actix_cors::Cors;
 use actix_web::{http, App, HttpServer, web};
+use controllers::home;
 use dotenv::dotenv;
 use crate::config::database::establish_connection;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
-
     HttpServer::new(move || {
         let cors = Cors::default()
             .allowed_origin("http://localhost:3000")
@@ -21,6 +21,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(cors) 
             .app_data(web::Data::new(establish_connection().clone()))
+            .service(home::index)
     })
     .bind(("0.0.0.0", 8080))?
     .run()
