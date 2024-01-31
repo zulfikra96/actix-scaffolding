@@ -3,8 +3,10 @@ mod routes;
 mod config;
 
 use actix_cors::Cors;
-use actix_web::{http, App, HttpServer};
+use actix_web::{http, App, HttpServer, web};
 use dotenv::dotenv;
+use crate::config::database::establish_connection;
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
@@ -18,6 +20,7 @@ async fn main() -> std::io::Result<()> {
             .max_age(3600);
         App::new()
             .wrap(cors) 
+            .app_data(web::Data::new(establish_connection().clone()))
     })
     .bind(("0.0.0.0", 8080))?
     .run()
