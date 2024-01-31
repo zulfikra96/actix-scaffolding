@@ -9,5 +9,8 @@ edition = "2021"
 actix = "0.13.1"
 actix-cors = "0.7.0"
 actix-web = "4.4.1"
+chrono = "0.4.33"
+diesel = {version = "2.1.4", features = ["postgres","r2d2","chrono","numeric"]}
 dotenv = "0.15.0"
 sailfish = "0.8.3"
+serde = "1.0.196"
