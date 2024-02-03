@@ -7,6 +7,7 @@ use actix_cors::Cors;
 use actix_web::{http, web, App, HttpServer};
 use controllers::home;
 use dotenv::dotenv;
+use actix_files as fs;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
