@@ -11,3 +11,4 @@ async fn index() -> HttpResponse {
     let view = HomeView {};
     HttpResponse::Ok().body(view.render_once().unwrap())
 }
+

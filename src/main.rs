@@ -1,12 +1,12 @@
+mod config;
 mod controllers;
 mod routes;
-mod config;
 
+use crate::config::database::establish_connection;
 use actix_cors::Cors;
-use actix_web::{http, App, HttpServer, web};
+use actix_web::{http, web, App, HttpServer};
 use controllers::home;
 use dotenv::dotenv;
-use crate::config::database::establish_connection;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -19,7 +19,8 @@ async fn main() -> std::io::Result<()> {
             .allowed_header(http::header::CONTENT_TYPE)
             .max_age(3600);
         App::new()
-            .wrap(cors) 
+            .service(fs::Files::new("/public", "src/public").show_files_listing())
+            .wrap(cors)
             .app_data(web::Data::new(establish_connection().clone()))
             .service(home::index)
     })
