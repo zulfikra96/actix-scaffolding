@@ -9,6 +9,9 @@ use controllers::home;
 use dotenv::dotenv;
 use actix_files as fs;
 
+pub type DBPool = Pool<ConnectionManager<PgConnection>>;
+
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
@@ -20,7 +23,7 @@ async fn main() -> std::io::Result<()> {
             .allowed_header(http::header::CONTENT_TYPE)
             .max_age(3600);
         App::new()
-            .service(fs::Files::new("/public", "src/public").show_files_listing())
+            .service(fs::Files::new("/public", "public").show_files_listing())
             .wrap(cors)
             .app_data(web::Data::new(establish_connection().clone()))
             .service(home::index)
