@@ -3,7 +3,7 @@ use actix_web::get;
 use sailfish::TemplateOnce;
 
 #[derive(TemplateOnce)]
-#[template(path = "index.stpl")]
+#[template(path = "index.html")]
 struct HomeView {}
 
 #[get("/")]
