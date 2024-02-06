@@ -2,15 +2,16 @@ mod config;
 mod controllers;
 mod routes;
 
+use actix_session::{SessionMiddleware, storage::CookieSessionStore};
 use crate::config::database::establish_connection;
 use actix_cors::Cors;
-use actix_web::{http, web, App, HttpServer};
-use controllers::home;
-use dotenv::dotenv;
 use actix_files as fs;
+use actix_web::{http, web, cookie::Key, App, HttpServer};
+use controllers::home;
+use diesel::{r2d2::{ConnectionManager, Pool}, PgConnection};
+use dotenv::dotenv;
 
 pub type DBPool = Pool<ConnectionManager<PgConnection>>;
-
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -25,6 +26,11 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(fs::Files::new("/public", "public").show_files_listing())
             .wrap(cors)
+            .wrap(
+                SessionMiddleware::builder(CookieSessionStore::default(), Key::from(&[0; 64]))
+                    .cookie_secure(false)
+                    .build(),
+            )
             .app_data(web::Data::new(establish_connection().clone()))
             .service(home::index)
     })
