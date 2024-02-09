@@ -16,6 +16,8 @@ pub type DBPool = Pool<ConnectionManager<PgConnection>>;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
+    let port = std::env::var("PORT")
+        .expect("Port is not defined").parse::<u16>().unwrap();
     HttpServer::new(move || {
         let cors = Cors::default()
             .allowed_origin("http://localhost:3000")
@@ -34,7 +36,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(establish_connection().clone()))
             .service(home::index)
     })
-    .bind(("0.0.0.0", 8080))?
+    .bind(("0.0.0.0", port))?
     .run()
     .await
 }
