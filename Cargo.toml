@@ -16,4 +16,4 @@ diesel = {version = "2.1.4", features = ["postgres","r2d2","chrono","numeric"]}
 dotenv = "0.15.0"
 magic-crypt = "3.1.13"
 sailfish = { version = "0.8.3", features = ["derive"]}
-serde = "1.0.196"
+serde = { version = "1.0.196", features = ["derive"]" }
