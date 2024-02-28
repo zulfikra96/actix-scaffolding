@@ -1,8 +1,11 @@
 mod config;
 mod controllers;
 mod routes;
+mod models;
 
+use actix::Actor;
 use actix_session::{SessionMiddleware, storage::CookieSessionStore};
+use config::socket_server;
 use crate::config::database::establish_connection;
 use actix_cors::Cors;
 use actix_files as fs;
@@ -18,6 +21,8 @@ async fn main() -> std::io::Result<()> {
     dotenv().ok();
     let port = std::env::var("PORT")
         .expect("Port is not defined").parse::<u16>().unwrap();
+    let server = socket_server::ChatServer::default().start();
+    
     HttpServer::new(move || {
         let cors = Cors::default()
             .allowed_origin("http://localhost:3000")
@@ -34,6 +39,7 @@ async fn main() -> std::io::Result<()> {
                     .build(),
             )
             .app_data(web::Data::new(establish_connection().clone()))
+            .app_data(web::Data::new(server.clone()))
             .service(home::index)
     })
     .bind(("0.0.0.0", port))?
