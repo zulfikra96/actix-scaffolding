@@ -4,6 +4,7 @@ use actix_web::{body::BoxBody, HttpResponse, Responder};
 use sailfish::TemplateOnce;
 use serde::{Serialize, Serializer};
 
+#[allow(dead_code)]
 pub enum Status {
     SUCCESS,
     FAIL,

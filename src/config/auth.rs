@@ -13,6 +13,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::models::users::{Role, UserToken};
 
+// function to encrypt plain text
+#[allow(dead_code)]
 pub fn encrypt(plain: String) -> String {
     let private_key = std::env::var("PRIVATE_KEY").expect("Private key is not defined");
     let mc = new_magic_crypt!(private_key, 256);
@@ -20,6 +22,8 @@ pub fn encrypt(plain: String) -> String {
     base64
 }
 
+// function to decrypt
+#[allow(dead_code)]
 pub fn decrypt(chipper: &String) -> String {
     let private_key = std::env::var("PRIVATE_KEY").expect("Private key is not defined");
     let mc = new_magic_crypt!(private_key, 256);
@@ -29,6 +33,7 @@ pub fn decrypt(chipper: &String) -> String {
     plain_text
 }
 
+#[allow(dead_code)]
 pub fn generate_token<T: Serialize + for<'a> Deserialize<'a>>(claims: T) -> String {
     let private_key = std::env::var("PRIVATE_KEY").expect("Something went wrong");
     let token = encode(
@@ -41,6 +46,7 @@ pub fn generate_token<T: Serialize + for<'a> Deserialize<'a>>(claims: T) -> Stri
     token
 }
 
+#[allow(dead_code)]
 pub enum ResponseType {
     PAGE,
     JSON,
@@ -77,7 +83,7 @@ impl ResponseError for ResponseErr {
         }
     }
 }
-
+// Error filter
 fn error_filter(
     response_type: ResponseType,
     res: ServiceRequest,
@@ -97,6 +103,7 @@ fn error_filter(
     }
 }
 
+#[allow(dead_code)]
 pub fn auth(
     req: ServiceRequest,
     _role: Vec<Role>,

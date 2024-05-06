@@ -23,6 +23,7 @@ pub struct WsChatSession {
 }
 
 impl WsChatSession {
+    #[allow(dead_code)]
     pub fn new(room: String, id: uuid::Uuid, addr: Addr<ChatServer>) -> WsChatSession {
         WsChatSession {
             addr,
@@ -83,7 +84,6 @@ impl WsChatSession {
     }
 }
 
-
 impl Handler<messages::Message> for WsChatSession {
     type Result = ();
     fn handle(&mut self, msg: messages::Message, ctx: &mut Self::Context) -> () {
@@ -109,7 +109,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WsChatSession {
             ws::Message::Pong(_) => {
                 self.hb = Instant::now();
             }
-            
+
             ws::Message::Text(text) => {
                 println!("{text}");
                 let res = self.addr.do_send(messages::ClientMessage {
@@ -118,7 +118,6 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WsChatSession {
                     room: self.room.to_owned(),
                 });
 
-                
                 res
             }
             ws::Message::Binary(_) => println!("Unexpected binary"),
