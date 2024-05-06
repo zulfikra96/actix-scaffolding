@@ -4,3 +4,4 @@ pub mod messages;
 pub mod session;
 pub mod socket_server;
 pub mod helpers;
+pub mod email;
