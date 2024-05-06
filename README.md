@@ -1,15 +1,14 @@
 
 # Actix Scaffolding
 
-
-
-
 ## Installation
 
-### prerequire
+## Prerequisites
 -   Rust 1.75 or latest version  
-- create .env file or change .env-example to .env
-- run the app "./start.sh" if you are using linux distro or using cli command "cargo run"
+- create a `.env` file by renaming the `.env-example` file to .env or set the necessary environment variables
+
+## How to Run
+- Linux Distro : Run the app using the command ``./start.sh``  using linux = - Command Line : Run the app using the command  `cargo run`
 
 
 ## Features
@@ -20,3 +19,5 @@
 - Sailfish template engine
 - Chrono Date & Time library
 - Uuid
+- REST API
+- Lettre email transport 
