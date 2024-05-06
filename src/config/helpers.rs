@@ -83,3 +83,70 @@ pub struct ErrorView {
 #[derive(TemplateOnce)]
 #[template( path = "notfound.html")]
 pub struct NotFoundView {}
+
+
+#[macro_export]
+macro_rules! response_json {
+    (UNAUTHORIZED) => {{
+       use crate::config::helper::ResponseJson;
+        HttpResponse::Unauthorized().json(ResponseJson::<()> {
+            status: Status::FAIL,
+            message: "Unauthorized".to_string(),
+            data: None,
+            status_code: 401,
+        })
+    }};
+    (OK, $data_type: ty, $data: expr) => {
+        HttpResponse::Ok().json(ResponseJson::<$data_type> {
+            status: Status::FAIL,
+            message: "Success".to_string(),
+            data: Some($data),
+            status_code: 401,
+        })
+    };
+     (OK) => {{
+         use crate::config::helper::Status;
+        use actix_web::HttpResponse;
+        use crate::config::helper::ResponseJson;
+
+        HttpResponse::Ok().json(ResponseJson::<()> {
+            status: Status::FAIL,
+            message: "Success".to_string(),
+            data: None,
+            status_code: 200,
+        })
+    }};
+    (NOTFOUND, $msg: expr) => {{
+        use crate::config::helper::Status;
+        use actix_web::HttpResponse;
+        use crate::config::helper::ResponseJson;
+
+        HttpResponse::NotFound().json(ResponseJson::<()> {
+            status: Status::FAIL,
+            message: $msg.to_string(),
+            data: None,
+            status_code: 404,
+        })
+    }};
+    (BADREQUEST, $msg: expr) => {{
+        use crate::config::helper::Status;
+        use crate::config::helper::ResponseJson;
+        HttpResponse::BadRequest().json(ResponseJson::<()> {
+            status: Status::FAIL,
+            message: $msg.to_string(),
+            data: None,
+            status_code: 400,
+        })
+    }};
+
+    (BADREQUEST, $msg: expr) => {{
+        use crate::config::helper::Status;
+        use crate::config::helper::ResponseJson;
+        HttpResponse::BadRequest().json(ResponseJson::<()> {
+            status: Status::FAIL,
+            message: $msg.to_string(),
+            data: None,
+            status_code: 400,
+        })
+    }};
+}
