@@ -2,6 +2,7 @@ mod config;
 mod controllers;
 mod routes;
 mod models;
+mod grapqhl;
 
 use actix::Actor;
 use actix_session::{SessionMiddleware, storage::CookieSessionStore};
@@ -22,7 +23,7 @@ async fn main() -> std::io::Result<()> {
     let port = std::env::var("PORT")
         .expect("Port is not defined").parse::<u16>().unwrap();
     let server = socket_server::ChatServer::default().start();
-    
+    println!("Server started on port {}", port);
     HttpServer::new(move || {
         let cors = Cors::default()
             .allowed_origin("http://localhost:3000")
@@ -37,6 +38,10 @@ async fn main() -> std::io::Result<()> {
                 SessionMiddleware::builder(CookieSessionStore::default(), Key::from(&[0; 64]))
                     .cookie_secure(false)
                     .build(),
+            )
+            .service(
+                web::resource("/graphql")
+                    .route(web::post().to(grapqhl::root::handler))   
             )
             .app_data(web::Data::new(establish_connection().clone()))
             .app_data(web::Data::new(server.clone()))
