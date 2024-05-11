@@ -22,3 +22,4 @@
 - Uuid
 - REST API
 - Lettre email transport 
+- GraphQL

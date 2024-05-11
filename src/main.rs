@@ -17,6 +17,7 @@ use dotenv::dotenv;
 
 pub type DBPool = Pool<ConnectionManager<PgConnection>>;
 
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
@@ -43,7 +44,7 @@ async fn main() -> std::io::Result<()> {
                 web::resource("/graphql")
                     .route(web::post().to(grapqhl::root::handler))   
             )
-            .app_data(web::Data::new(establish_connection().clone()))
+            .app_data(web::Data::new(establish_connection()))
             .app_data(web::Data::new(server.clone()))
             .service(home::index)
     })

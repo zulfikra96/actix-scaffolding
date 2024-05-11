@@ -4,15 +4,25 @@ use std::env;
 use diesel::r2d2::Pool;
 use diesel::r2d2::ConnectionManager;
 
-pub fn establish_connection() -> Pool<ConnectionManager<PgConnection>> {
+pub fn establish_connection() -> Result<Pool<ConnectionManager<PgConnection>>, ()> {
     dotenv().ok();
 
-    let database_url = env::var("DATABASE_URL").expect("Database url must be set");
+    let database_url = match env::var("DATABASE_URL") {
+        Ok(url) => url,
+        Err(_) => {
+            return Err(())
+        }
+    };
     let manager = ConnectionManager::<PgConnection>::new(database_url);
     
-    Pool::builder()
-        .build(manager)
-        .expect("Could not build connection pool") 
+    match Pool::builder()
+    .build(manager) {
+        Ok(pool) => Ok(pool.clone()),
+        Err(_) => {
+            println!("database is not set up");
+            Err(())
+        }
+    }
 }
 
 #[macro_export]
